@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Button, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import FormContainer from "../components/FormContainer";
-import { register } from "../actions/userActions";
+import { register } from "../actions/authActions";
 import Message from "../components/Message";
-import { USER_UPDATE_RESET } from "../constants/userConstants";
 
 const RegisterScreen = ({ location, history }) => {
   const [username, setUsername] = useState("");
@@ -23,7 +22,6 @@ const RegisterScreen = ({ location, history }) => {
   useEffect(() => {
     if (success) {
       history.push(`/login`);
-      dispatch({ type: USER_UPDATE_RESET });
     }
   }, [history, success, dispatch]);
   const submitHandler = (e) => {

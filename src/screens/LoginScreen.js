@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import FormContainer from "../components/FormContainer";
-import { Link } from "react-router-dom";
-import { login, getUserDetails } from "../actions/userActions";
+import { getUserDetails } from "../actions/userActions";
+import { login } from "../actions/authActions";
 import Message from "../components/Message";
 
 const LoginScreen = ({ location, history }) => {
@@ -24,6 +24,10 @@ const LoginScreen = ({ location, history }) => {
     e.preventDefault();
     await dispatch(login(username, password));
     await dispatch(getUserDetails());
+  };
+  const forgotPasswordHandler = (e) => {
+    e.preventDefault();
+    history.push("/forgot-password");
   };
   return (
     <FormContainer>
@@ -51,6 +55,13 @@ const LoginScreen = ({ location, history }) => {
         </Form.Group>
         <Button type="submit" variant="primary">
           Sign In
+        </Button>
+        <Button
+          onClick={forgotPasswordHandler}
+          type="button"
+          variant="secondary"
+        >
+          Forgot Password
         </Button>
       </Form>
     </FormContainer>
