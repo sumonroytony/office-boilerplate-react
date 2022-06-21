@@ -21,11 +21,11 @@ const reducer = combineReducers({
   userUpdateProfile: userUpdateProfileReducer,
 });
 
-const userInfoFromStorage = localStorage.getItem("userInfo")
-  ? JSON.parse(localStorage.getItem("userInfo"))
+const userTokenFromStorage = localStorage.getItem("userToken")
+  ? JSON.parse(localStorage.getItem("userToken"))
   : null;
 const initialState = {
-  userLogin: { userInfo: userInfoFromStorage },
+  userLogin: { userToken: userTokenFromStorage },
 };
 
 const middleware = [thunk];

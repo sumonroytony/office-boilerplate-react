@@ -24,22 +24,35 @@ import {
   USER_UPDATE_SUCCESS,
 } from "../constants/userConstants";
 
+const API = "http://58.84.34.65:8181/api/";
+
 export const login = (username, password) => async (dispatch) => {
-  const API = "http://58.84.34.65:8181/api/";
   try {
     dispatch({
       type: USER_LOGIN_REQUEST,
     });
     const config = {
       headers: {
-        "Content-type": "application/json",
+        "Content-type": "application/x-www-form-urlencoded",
       },
     };
-    const { data } = await axios.post(
-      API + "auth/token",
-      { username, password },
-      config
-    );
+    const grant_type = "password";
+    const client_id = "m655m1x5kFgRvagNUNDDERy9nJjE0Qf5CqBsm7aX";
+    const client_secret =
+      "pbkdf2_sha256$260000$f8N544SgbHHV98lEpzahwu$CkQPT/6dMDx7y9XQ6oMwjfjYeqhhO5OKqf7+31WVpdA=";
+
+    const formData = new FormData();
+    formData.append("grant_type", grant_type);
+    formData.append("client_id", client_id);
+    formData.append("client_secret", client_secret);
+    formData.append("username", username);
+    formData.append("password", password);
+
+    const { data } = await axios.post(API + "auth/token/", formData, {
+      headers: {
+        "Content-type": "application/x-www-form-urlencoded",
+      },
+    });
     dispatch({
       type: USER_LOGIN_SUCCESS,
       payload: data,
@@ -62,47 +75,22 @@ export const Logout = () => (dispatch) => {
 };
 
 export const register =
-  (name, email, password, krisiCardNumber, district, thana, nid, phoneNumber) =>
+  (username, email, password, confirm_password, first_name, last_name, phone) =>
   async (dispatch, getState) => {
     try {
       dispatch({
         type: USER_REGISTER_REQUEST,
       });
-      const {
-        userLogin: { userInfo },
-      } = getState();
-      if (userInfo) {
-        const config = {
-          headers: {
-            "Content-type": "application/json",
-            Authorization: `Bearer ${userInfo.token}`,
-          },
-        };
-        await axios.post(
-          "/api/users/",
-          {
-            name,
-            email,
-            password,
-            krisiCardNumber,
-            district,
-            thana,
-            nid,
-            phoneNumber,
-          },
-          config
-        );
-      } else {
-        await axios.post("/api/users/arotdar", {
-          name,
-          email,
-          password,
-          district,
-          thana,
-          nid,
-          phoneNumber,
-        });
-      }
+
+      await axios.post(API + "users/", {
+        username,
+        email,
+        password,
+        confirm_password,
+        first_name,
+        last_name,
+        phone,
+      });
 
       dispatch({
         type: USER_REGISTER_SUCCESS,
@@ -119,21 +107,22 @@ export const register =
     }
   };
 
-export const getUserDetails = (id) => async (dispatch, getState) => {
+export const getUserDetails = () => async (dispatch, getState) => {
   try {
     dispatch({
       type: USER_DETAILS_REQUEST,
     });
     const {
-      userLogin: { userInfo },
+      userLogin: { userToken },
     } = getState();
+    console.log({ userToken });
     const config = {
       headers: {
         "Content-type": "application/json",
-        Authorization: `Bearer ${userInfo.token}`,
+        Authorization: `Bearer ${userToken.access_token}`,
       },
     };
-    const { data } = await axios.get(`/api/users/${id}`, config);
+    const { data } = await axios.get(API + `user-profile/`, config);
     dispatch({
       type: USER_DETAILS_SUCCESS,
       payload: data,
@@ -155,11 +144,11 @@ export const listUsers = () => async (dispatch, getState) => {
       type: USER_LIST_REQUEST,
     });
     const {
-      userLogin: { userInfo },
+      userLogin: { userToken },
     } = getState();
     const config = {
       headers: {
-        Authorization: `Bearer ${userInfo.token}`,
+        Authorization: `Bearer ${userToken.access_token}`,
       },
     };
     const { data } = await axios.get(`/api/users`, config);
@@ -184,11 +173,11 @@ export const deleteUser = (id) => async (dispatch, getState) => {
       type: USER_DELETE_REQUEST,
     });
     const {
-      userLogin: { userInfo },
+      userLogin: { userToken },
     } = getState();
     const config = {
       headers: {
-        Authorization: `Bearer ${userInfo.token}`,
+        Authorization: `Bearer ${userToken.access_token}`,
       },
     };
     await axios.delete(`/api/users/${id}`, config);
@@ -211,12 +200,12 @@ export const updateUser = (user) => async (dispatch, getState) => {
       type: USER_UPDATE_REQUEST,
     });
     const {
-      userLogin: { userInfo },
+      userLogin: { userToken },
     } = getState();
     const config = {
       headers: {
         "Content-type": "application/json",
-        Authorization: `Bearer ${userInfo.token}`,
+        Authorization: `Bearer ${userToken.access_token}`,
       },
     };
     const { data } = await axios.put(`/api/users/${user._id}`, user, config);
@@ -244,15 +233,15 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
       type: USER_UPDATE_PROFILE_REQUEST,
     });
     const {
-      userLogin: { userInfo },
+      userLogin: { userToken },
     } = getState();
     const config = {
       headers: {
         "Content-type": "application/json",
-        Authorization: `Bearer ${userInfo.token}`,
+        Authorization: `Bearer ${userToken.access_token}`,
       },
     };
-    const { data } = await axios.put(`/api/users/profile`, user, config);
+    const { data } = await axios.post(API + `user-profile/`, user, config);
     dispatch({
       type: USER_UPDATE_PROFILE_SUCCESS,
       payload: data,

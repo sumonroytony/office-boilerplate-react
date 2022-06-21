@@ -6,8 +6,6 @@ import HomeScreen from "./screens/HomeScreen";
 import LoginScreen from "./screens/LoginScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import RegisterScreen from "./screens/RegisterScreen";
-import UserEditScreen from "./screens/UserEditScreen";
-import UserListScreen from "./screens/UserListScreen";
 
 function App() {
   return (
@@ -18,8 +16,6 @@ function App() {
           <Route path="/" component={HomeScreen} exact />
           <Route path="/profile" component={ProfileScreen} exact />
           <Route path="/login" component={LoginScreen} />
-          <Route path="/users" component={UserListScreen} exact />
-          <Route path="/user/:id/edit" component={UserEditScreen} />
           <Route path="/users/create" component={RegisterScreen} exact />
         </Container>
       </main>

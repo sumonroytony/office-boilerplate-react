@@ -24,14 +24,14 @@ import {
   USER_UPDATE_PROFILE_REQUEST,
   USER_UPDATE_PROFILE_SUCCESS,
   USER_UPDATE_PROFILE_FAILED,
-} from '../constants/userConstants';
+} from "../constants/userConstants";
 
 export const userLoginReducer = (state = { products: [] }, action) => {
   switch (action.type) {
     case USER_LOGIN_REQUEST:
       return { loading: true };
     case USER_LOGIN_SUCCESS:
-      return { loading: false, userInfo: action.payload };
+      return { loading: false, userToken: action.payload };
     case USER_LOGIN_FAILED:
       return { loading: false, error: action.payload };
     case USER_LOGOUT:
@@ -121,7 +121,7 @@ export const userUpdateProfileReducer = (state = { user: {} }, action) => {
     case USER_UPDATE_PROFILE_REQUEST:
       return { loading: true };
     case USER_UPDATE_PROFILE_SUCCESS:
-      return { loading: false, success: true, userInfo: action.payload };
+      return { loading: false, success: true, userToken: action.payload };
     case USER_UPDATE_PROFILE_FAILED:
       return { loading: false, error: action.payload };
     default:

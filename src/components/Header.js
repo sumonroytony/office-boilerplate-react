@@ -7,7 +7,7 @@ import { Logout } from '../actions/userActions';
 const Header = () => {
   const dispatch = useDispatch();
   const userLogin = useSelector((state) => state.userLogin);
-  const { userInfo } = userLogin;
+  const { userToken } = userLogin;
 
   const logoutHandler = () => {
     dispatch(Logout());
@@ -23,10 +23,10 @@ const Header = () => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ml-auto">
-              {userInfo && userInfo.isAdmin ? (
+              {userToken && userToken.isAdmin ? (
                 <>
                   <Navbar>
-                    <NavDropdown title={userInfo.name} id="username">
+                    <NavDropdown title={userToken.name} id="username">
                       <LinkContainer to="/profile">
                         <NavDropdown.Item>Profile</NavDropdown.Item>
                       </LinkContainer>
@@ -52,10 +52,10 @@ const Header = () => {
                     </LinkContainer>
                   </Navbar>
                 </>
-              ) : userInfo && !userInfo.isAdmin ? (
+              ) : userToken && !userToken.isAdmin ? (
                 <>
                   <Navbar>
-                    <NavDropdown title={userInfo.name} id="username">
+                    <NavDropdown title={userToken.name} id="username">
                       <LinkContainer to="/profile">
                         <NavDropdown.Item>Profile</NavDropdown.Item>
                       </LinkContainer>

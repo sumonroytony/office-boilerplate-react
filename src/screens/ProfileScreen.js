@@ -7,50 +7,43 @@ import Loader from "../components/Loader";
 
 const ProfileScreen = ({ location, history }) => {
   const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
+  const [first_name, setFirst_name] = useState("");
+  const [last_name, setLast_name] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [nid, setNid] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState(0);
-  const [message, setMessage] = useState(null);
+  const [confirm_password, setConfirm_password] = useState("");
+  const [phone, setPhone] = useState("");
+  const [message, setMessage] = useState("");
 
   const dispatch = useDispatch();
 
   const userDetails = useSelector((state) => state.userDetails);
   const { error, user } = userDetails;
   const userLogin = useSelector((state) => state.userLogin);
-  const { userInfo } = userLogin;
+  const { userToken } = userLogin;
 
   const userUpdateProfile = useSelector((state) => state.userUpdateProfile);
   const { success } = userUpdateProfile;
 
   useEffect(() => {
-    if (!userInfo) {
+    if (!userToken) {
       history.push("/login");
     } else {
-      if (user && !user.name) {
-        dispatch(getUserDetails(userInfo._id));
-      } else {
-        setName(user.name);
-        setEmail(user.email);
-        setNid(user.nid);
-        setPhoneNumber(user.phoneNumber);
-      }
+      setEmail(user.email);
+      setPhone(user.phone);
+      setFirst_name(user.first_name);
+      setLast_name(user.last_name);
     }
-  }, [dispatch, history, userInfo, user]);
+  }, [dispatch, history, userToken, user]);
   const submitHandler = (e) => {
     e.preventDefault();
-    if (password !== confirmPassword) {
+    if (password !== confirm_password) {
       setMessage("Password Do Not Match");
     } else {
       dispatch(
         updateUserProfile({
-          id: user._id,
-          name,
-          email,
-          password,
-          phoneNumber,
-          nid,
+          first_name,
+          last_name,
+          phone,
         })
       );
     }
@@ -63,13 +56,31 @@ const ProfileScreen = ({ location, history }) => {
         {error && <Message variant="danger">{error}</Message>}
         {success && <Message variant="success">Profile Updated</Message>}
         <Form onSubmit={submitHandler}>
-          <Form.Group controlId="name">
-            <Form.Label>Name</Form.Label>
+          {/* <Form.Group controlId="username">
+            <Form.Label>Username</Form.Label>
             <Form.Control
-              type="name"
-              placeholder="Enter Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              type="username"
+              placeholder="Enter username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            ></Form.Control>
+          </Form.Group> */}
+          <Form.Group controlId="first_name">
+            <Form.Label>First Name</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter first name"
+              value={first_name}
+              onChange={(e) => setFirst_name(e.target.value)}
+            ></Form.Control>
+          </Form.Group>
+          <Form.Group controlId="last_name">
+            <Form.Label>Last Name</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter last name"
+              value={last_name}
+              onChange={(e) => setLast_name(e.target.value)}
             ></Form.Control>
           </Form.Group>
           <Form.Group controlId="email">
@@ -78,10 +89,22 @@ const ProfileScreen = ({ location, history }) => {
               type="email"
               placeholder="Enter Email"
               value={email}
+              readOnly
               onChange={(e) => setEmail(e.target.value)}
             ></Form.Control>
           </Form.Group>
-          <Form.Group controlId="password">
+
+          <Form.Group controlId="phone">
+            <Form.Label>Phone Number</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter phone"
+              value={phone}
+              readOnly
+              onChange={(e) => setPhone(e.target.value)}
+            ></Form.Control>
+          </Form.Group>
+          {/* <Form.Group controlId="password">
             <Form.Label>Password </Form.Label>
             <Form.Control
               type="password"
@@ -90,39 +113,15 @@ const ProfileScreen = ({ location, history }) => {
               onChange={(e) => setPassword(e.target.value)}
             ></Form.Control>
           </Form.Group>
-          <Form.Group controlId="confirmPassword">
+          <Form.Group controlId="confirm_password">
             <Form.Label>Confirm Password </Form.Label>
             <Form.Control
               type="password"
               placeholder="Confirm password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              value={confirm_password}
+              onChange={(e) => setConfirm_password(e.target.value)}
             ></Form.Control>
-          </Form.Group>
-          {!userInfo && userInfo.isAdmin ? (
-            <>
-              <Form.Group controlId="nid">
-                <Form.Label>NID </Form.Label>
-                <Form.Control
-                  type="number"
-                  placeholder="Enter NID"
-                  value={nid}
-                  onChange={(e) => setNid(e.target.value)}
-                ></Form.Control>
-              </Form.Group>
-              <Form.Group controlId="phoneNumber">
-                <Form.Label>Phone Number </Form.Label>
-                <Form.Control
-                  type="number"
-                  placeholder="Enter Phone Number"
-                  value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                ></Form.Control>
-              </Form.Group>
-            </>
-          ) : (
-            <> </>
-          )}
+          </Form.Group> */}
           <Button type="submit" variant="primary">
             Update
           </Button>
